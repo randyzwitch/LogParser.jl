@@ -22,15 +22,15 @@ ApacheLog
 ###############################################################################
 
 immutable ApacheLog
-	ip
-	rfc1413
-	userid
-	requesttime
-	resource
-	statuscode
-	bytecount
-	referrer
-	useragent
+	ip::String
+	rfc1413::String
+	userid::String
+	requesttime::String
+	resource::String
+	statuscode::Integer
+	bytecount::Integer
+	referrer::String
+	useragent::String
 end
 
 
@@ -55,18 +55,18 @@ const apachecombinedregex = r"""([\d\.]+)\s([\w.-]+)\s([\w.-]+)\s(\[.+\])\s"([^"
 #
 ###############################################################################
 
-function apachecombined(logline::ASCIIString)
+function apachecombined(logline::String)
     m = match(apachecombinedregex, logline)
     return ApacheLog(
-					m.captures[1],
-					m.captures[2],
-					m.captures[3],
-					m.captures[4],
-					m.captures[5],
-					m.captures[6],
-					m.captures[7],
-					m.captures[8],
-					m.captures[9]
+					utf8(m.captures[1]), #IP
+					utf8(m.captures[2]), #RFC1413
+					utf8(m.captures[3]), #userid
+					utf8(m.captures[4]), #requesttime
+					utf8(m.captures[5]), #resource
+					int(m.captures[6]),  #Status Code
+					int(m.captures[7]),  #Request Size
+					utf8(m.captures[8]), #Referrer
+					utf8(m.captures[9])  #User-Agent
     				)
 end
 

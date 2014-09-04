@@ -9,8 +9,7 @@ module LogParser
 ###############################################################################
 
 export 
-apachecombined,
-apachecombinedregex
+parseapachecombined
 
 ###############################################################################
 #
@@ -65,7 +64,7 @@ const apachecombinedregex = r"""([\d\.]+) ([\w.-]+) ([\w.-]+) (\[.+\]) "([^"\r\n
 #
 ###############################################################################
 
-function apachecombined(logline::String; strict = true)
+function parseapachecombined(logline::String; strict = true)
     
     #Strict mode only allows for comparison against valid Apache Common Log format
     strict? regexarray = [apachecombinedregex]: 
@@ -98,6 +97,11 @@ function apachecombined(logline::String; strict = true)
     #If all else fails, return "nomatch" as referrer and logline as useragent field 
     return ApacheLog(ip, rfc1413, userid, requesttime,	resource, statuscode, requestsize, "nomatch", logline) 
 
-end #End apachecombined
+end #End parseapachecombined::String
+
+#Vectorized version of parseapachecombined
+#Use custom version instead of base macro to control return Array type
+parseapachecombined(logarray::Array; strict = true) = ApacheLog[parseapachecombined(x; strict = strict) for x in logarray]
+
 
 end # module

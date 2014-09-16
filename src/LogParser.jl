@@ -75,7 +75,12 @@ function parseapachecombined(logline::String; strict = true)
     ip = rfc1413 = userid = requesttime = resource = referrer = useragent = utf8("")
     statuscode = requestsize = int(0)
 
- 	for regex in regexarray   
+ 	for regex in regexarray
+
+ 	#Allocate bigger stack per https://github.com/JuliaLang/julia/issues/8278
+ 	ccall((:pcre_assign_jit_stack, :libpcre), Void, (Ptr{Void}, Ptr{Void}, Ptr{Void}), regex.extra, C_NULL,
+      ccall((:pcre_jit_stack_alloc, :libpcre), Ptr{Void}, (Cint, Cint), 32768, 1048576))   
+    	
     	if (m = match(regex, logline)) != nothing
 
     	#Use try since we don't know how many matches actually happened

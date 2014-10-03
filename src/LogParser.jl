@@ -9,7 +9,10 @@ module LogParser
 ###############################################################################
 
 export 
-parseapachecombined
+parseapachecombined,
+DataFrame
+
+import DataFrames: DataFrame
 
 ###############################################################################
 #
@@ -26,7 +29,7 @@ immutable ApacheLog
 	requesttime
 	resource
 	statuscode
-	bytecount
+	requestsize
 	referrer
 	useragent
 end
@@ -64,11 +67,9 @@ const apachecombinedregex = r"""([\d\.]+) ([\w.-]+) ([\w.-]+) (\[.+\]) "([^"\r\n
 #
 ###############################################################################
 
-function parseapachecombined(logline::String; strict = true)
+function parseapachecombined(logline::String)
     
-    #Strict mode only allows for comparison against valid Apache Common Log format
-    strict? regexarray = [apachecombinedregex]: 
-    		regexarray = [apachecombinedregex, firstsevenregex, firstsixregex, firstfiveregex, firstfourregex, firstthreeregex, firsttworegex, firstfieldregex]  
+    regexarray = [apachecombinedregex, firstsevenregex, firstsixregex, firstfiveregex, firstfourregex, firstthreeregex, firsttworegex, firstfieldregex]  
 
 
     #Declare variable defaults up front for less coding later
@@ -76,11 +77,7 @@ function parseapachecombined(logline::String; strict = true)
     statuscode = requestsize = int(0)
 
  	for regex in regexarray
-
- 	#Allocate bigger stack per https://github.com/JuliaLang/julia/issues/8278
- 	ccall((:pcre_assign_jit_stack, :libpcre), Void, (Ptr{Void}, Ptr{Void}, Ptr{Void}), regex.extra, C_NULL,
-      ccall((:pcre_jit_stack_alloc, :libpcre), Ptr{Void}, (Cint, Cint), 32768, 1048576))   
-    	
+ 	
     	if (m = match(regex, logline)) != nothing
 
     	#Use try since we don't know how many matches actually happened
@@ -106,7 +103,50 @@ end #End parseapachecombined::String
 
 #Vectorized version of parseapachecombined
 #Use custom version instead of base macro to control return Array type
-parseapachecombined(logarray::Array; strict = true) = ApacheLog[parseapachecombined(x; strict = strict) for x in logarray]
+parseapachecombined(logarray::Array) = ApacheLog[parseapachecombined(x) for x in logarray]
+
+
+###############################################################################
+#
+#
+#	DataFrame parser
+#
+#
+###############################################################################
+
+function DataFrame(logarray::Array{ApacheLog,1})
+
+       #fields to parse    
+    sym = [:ip, :rfc1413, :userid, :requesttime, :resource, :referrer, :useragent, :statuscode, :requestsize]
+    
+    #Allocate Arrays
+    for value in sym[1:7]
+        @eval $value = UTF8String[]
+    end
+
+    for value in sym[8:end]
+        @eval $value = Int64[]
+    end
+
+    #For each value in array, parse into individual arrays
+    for apachelog in logarray
+        for val in sym
+            push!(eval(val), getfield(apachelog, val))
+        end
+    end
+
+    #Append arrays into dataframe
+    _df = DataFrame()
+
+    for value in sym
+    _df[value] = eval(value)
+    end
+
+    return _df
+
+end
+
+DataFrame(logline::ApacheLog) = DataFrame([logline])
 
 
 end # module

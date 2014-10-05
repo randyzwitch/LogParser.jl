@@ -8,8 +8,10 @@ LogParser is a package for parsing server logs. Currently, only server logs havi
 
 The API for this package is straightforward: 
 
+	using LogParser, GZip
+	
 	#Read in gzipped file
-	jbapachecombined = readdlm(gzopen("/Users/randyzwitch/Downloads/juliabloggers.com-Sep-2014.gz"), '\t')
+	jbapachecombined = readdlm(gzopen(Pkg.dir("LogParser", "test", "data", "juliabloggers-apachecombined.gz")), '\t')
 
 	#Parse file
 	jbparsed = parseapachecombined(jbapachecombined)

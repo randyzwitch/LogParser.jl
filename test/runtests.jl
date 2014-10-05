@@ -2,9 +2,6 @@ using LogParser
 using Base.Test
 using GZip
 
-
-testfile = Pkg.dir("LogParser", "test", "data", "juliabloggers-apachecombined.gz")
-
 #Read in gzipped file
 jbapachecombined = readdlm(gzopen(Pkg.dir("LogParser", "test", "data", "juliabloggers-apachecombined.gz")), '\t')
 

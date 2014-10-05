@@ -10,7 +10,8 @@ module LogParser
 
 export 
 parseapachecombined,
-DataFrame
+DataFrame,
+ApacheLog
 
 import DataFrames: DataFrame
 

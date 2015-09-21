@@ -1,3 +1,4 @@
+VERSION >= v"0.4-" && __precompile__()
 module LogParser
 
 ###############################################################################
@@ -8,7 +9,7 @@ module LogParser
 #
 ###############################################################################
 
-export 
+export
 parseapachecombined,
 DataFrame,
 ApacheLog
@@ -56,7 +57,7 @@ const apachecombinedregex = r"""([\d\.]+) ([\w.-]+) ([\w.-]+) (\[.+\]) "([^"\r\n
 	 const firstsixregex  = r"""([\d\.]+) ([\w.-]+) ([\w.-]+) (\[.+\]) "([^"\r\n]*|[^"\r\n\[]*\[.+\][^"]+|[^"\r\n]+.[^"]+)" (\d{3})"""
 	 const firstfiveregex = r"""([\d\.]+) ([\w.-]+) ([\w.-]+) (\[.+\]) "([^"\r\n]*|[^"\r\n\[]*\[.+\][^"]+|[^"\r\n]+.[^"]+)"?"""
 	 const firstfourregex = r"""([\d\.]+) ([\w.-]+) ([\w.-]+) (\[.+\])"""
-	const firstthreeregex = r"""([\d\.]+) ([\w.-]+) ([\w.-]+)""" 
+	const firstthreeregex = r"""([\d\.]+) ([\w.-]+) ([\w.-]+)"""
 	  const firsttworegex = r"""([\d\.]+) ([\w.-]+)"""
 	const firstfieldregex = r"""([\d\.]+)"""
 
@@ -68,17 +69,17 @@ const apachecombinedregex = r"""([\d\.]+) ([\w.-]+) ([\w.-]+) (\[.+\]) "([^"\r\n
 #
 ###############################################################################
 
-function parseapachecombined(logline::String)
-    
-    regexarray = [apachecombinedregex, firstsevenregex, firstsixregex, firstfiveregex, firstfourregex, firstthreeregex, firsttworegex, firstfieldregex]  
+function parseapachecombined(logline::AbstractString)
+
+    regexarray = [apachecombinedregex, firstsevenregex, firstsixregex, firstfiveregex, firstfourregex, firstthreeregex, firsttworegex, firstfieldregex]
 
 
     #Declare variable defaults up front for less coding later
     ip = rfc1413 = userid = requesttime = resource = referrer = useragent = utf8("")
-    statuscode = requestsize = int(0)
+    statuscode = requestsize = Int(0)
 
  	for regex in regexarray
- 	
+
     	if (m = match(regex, logline)) != nothing
 
     	#Use try since we don't know how many matches actually happened
@@ -87,8 +88,8 @@ function parseapachecombined(logline::String)
 	    	try userid		= utf8(m.captures[3]) end
 	    	try requesttime	= utf8(m.captures[4]) end
 	    	try resource	= utf8(m.captures[5]) end
-	    	try statuscode	= int(m.captures[6]) end
-	    	try requestsize	= int(m.captures[7]) end
+	    	try statuscode	= parse(Int, m.captures[6]) end
+	    	try requestsize	= parse(Int, m.captures[7]) end
 	    	try referrer	= utf8(m.captures[8]) end
 	    	try useragent	= utf8(m.captures[9]) end
 
@@ -96,9 +97,9 @@ function parseapachecombined(logline::String)
 		end
 
    	end #End for loop
-    
-    #If all else fails, return "nomatch" as referrer and logline as useragent field 
-    return ApacheLog(ip, rfc1413, userid, requesttime,	resource, statuscode, requestsize, "nomatch", logline) 
+
+    #If all else fails, return "nomatch" as referrer and logline as useragent field
+    return ApacheLog(ip, rfc1413, userid, requesttime,	resource, statuscode, requestsize, "nomatch", logline)
 
 end #End parseapachecombined::String
 
@@ -117,16 +118,16 @@ parseapachecombined(logarray::Array) = ApacheLog[parseapachecombined(x) for x in
 
 function DataFrame(logarray::Array{ApacheLog,1})
 
-       #fields to parse    
+       #fields to parse
     sym = [:ip, :rfc1413, :userid, :requesttime, :resource, :referrer, :useragent, :statuscode, :requestsize]
-    
+
     #Allocate Arrays
     for value in sym[1:7]
         @eval $value = UTF8String[]
     end
 
     for value in sym[8:end]
-        @eval $value = Int64[]
+        @eval $value = Int[]
     end
 
     #For each value in array, parse into individual arrays

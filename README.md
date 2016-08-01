@@ -4,6 +4,7 @@ OSX/Linux: [![Build Status](https://travis-ci.org/randyzwitch/LogParser.jl.svg?b
 pkg.julialang.org: [![LogParser](http://pkg.julialang.org/badges/LogParser_0.3.svg)](http://pkg.julialang.org/?pkg=LogParser) </br>
 pkg.julialang.org: [![LogParser](http://pkg.julialang.org/badges/LogParser_0.4.svg)](http://pkg.julialang.org/?pkg=LogParser) </br>
 pkg.julialang.org: [![LogParser](http://pkg.julialang.org/badges/LogParser_0.5.svg)](http://pkg.julialang.org/?pkg=LogParser) </br>
+Windows: [![Build status](https://ci.appveyor.com/api/projects/status/j33i3qtdnpqwjwfk?svg=true)](https://ci.appveyor.com/project/randyzwitch/logparser-jl) </br>
 
 LogParser.jl is a package for parsing server logs. Currently, only server logs having the [Apache Combined](http://httpd.apache.org/docs/2.2/logs.html#combined) format are supported (although [Apache Common](http://httpd.apache.org/docs/2.2/logs.html#common) may parse as well). Additional types of logs may be added in the future as well.
 

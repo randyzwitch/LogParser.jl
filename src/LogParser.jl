@@ -48,7 +48,7 @@ end
 #Regex for Apache Combined Log File Format:
 #Format specified at http://httpd.apache.org/docs/2.4/logs.html
 
-#Stict Mode - Works 99.9% of time on Juliabloggers and randyzwitch.com August test files
+#Strict Mode - Works 99.9% of time on Juliabloggers and randyzwitch.com August test files
 const apachecombinedregex = r"""([\d\.]+) ([\w.-]+) ([\w.-]+) (\[.+\]) "([^"\r\n]*|[^"\r\n\[]*\[.+\][^"]+|[^"\r\n]+.[^"]+)" (\d{3}) (\d+|-) ("(?:[^"]|\")+)"? ("(?:[^"]|\")+)"?"""
 
 #Non-strict mode: Capture as much info as possible
@@ -75,7 +75,7 @@ function parseapachecombined(logline::AbstractString)
 
 
     #Declare variable defaults up front for less coding later
-    ip = rfc1413 = userid = requesttime = resource = referrer = useragent = utf8("")
+    ip = rfc1413 = userid = requesttime = resource = referrer = useragent = String("")
     statuscode = requestsize = Int(0)
 
  	for regex in regexarray
@@ -83,15 +83,15 @@ function parseapachecombined(logline::AbstractString)
     	if (m = match(regex, logline)) != nothing
 
     	#Use try since we don't know how many matches actually happened
-	    	try ip 			= utf8(m.captures[1]) end
-	    	try rfc1413 	= utf8(m.captures[2]) end
-	    	try userid		= utf8(m.captures[3]) end
-	    	try requesttime	= utf8(m.captures[4]) end
-	    	try resource	= utf8(m.captures[5]) end
+	    	try ip 			= String(m.captures[1]) end
+	    	try rfc1413 	= String(m.captures[2]) end
+	    	try userid		= String(m.captures[3]) end
+	    	try requesttime	= String(m.captures[4]) end
+	    	try resource	= String(m.captures[5]) end
 	    	try statuscode	= parse(Int, m.captures[6]) end
 	    	try requestsize	= parse(Int, m.captures[7]) end
-	    	try referrer	= utf8(m.captures[8]) end
-	    	try useragent	= utf8(m.captures[9]) end
+	    	try referrer	= String(m.captures[8]) end
+	    	try useragent	= String(m.captures[9]) end
 
 			return ApacheLog(ip, rfc1413, userid, requesttime,	resource, statuscode, requestsize, referrer, useragent)
 		end

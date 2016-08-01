@@ -3,10 +3,10 @@ using Base.Test
 using GZip
 
 #Read in gzipped file
-jbapachecombined = readdlm(gzopen(Pkg.dir("LogParser", "test", "data", "juliabloggers-apachecombined.gz")), '\t')
+jbapachecombined = readdlm(gzopen(joinpath(dirname(@__FILE__), "data", "juliabloggers-apachecombined.gz")), '\t')
 
 #Parse file
-jbparsed = parseapachecombined(jbapachecombined)
+jbparsed = parseapachecombined(vec(jbapachecombined))
 
 #Test that array is 122,143 elements long
 @test size(jbparsed)[1] == 122143

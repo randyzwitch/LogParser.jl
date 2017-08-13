@@ -24,7 +24,7 @@ import DataFrames: DataFrame
 #
 ###############################################################################
 
-immutable ApacheLog
+struct ApacheLog
 	ip
 	rfc1413
 	userid

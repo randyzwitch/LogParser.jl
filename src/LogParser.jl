@@ -1,4 +1,4 @@
-VERSION >= v"0.4-" && __precompile__()
+__precompile__()
 module LogParser
 
 ###############################################################################
@@ -123,7 +123,7 @@ function DataFrame(logarray::Array{ApacheLog,1})
 
     #Allocate Arrays
     for value in sym[1:7]
-        @eval $value = UTF8String[]
+        @eval $value = String[]
     end
 
     for value in sym[8:end]

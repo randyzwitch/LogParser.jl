@@ -10,12 +10,12 @@ LogParser.jl is a package for parsing server logs. Currently, only server logs h
 
 LogParser.jl will attempt to handle the log format even if it is mangled, returning partial matches as best as possible. For example, if the end of the log entry is mangled, you may still get an IP address returned, timestamp and other parts that were able to be parsed.
 
-##Code examples
+## Code examples
 
-The API for this package is straightforward: 
+The API for this package is straightforward:
 
 	using LogParser, GZip
-	
+
 	#Read in gzipped file
 	jbapachecombined = readdlm(gzopen(Pkg.dir("LogParser", "test", "data", "juliabloggers-apachecombined.gz")), '\t')
 
@@ -25,7 +25,6 @@ The API for this package is straightforward:
 	#Convert to DataFrame if desired
 	jbparsed_df = DataFrame(jbparsed)
 
-##Licensing
+## Licensing
 
 LogParser.jl is licensed under the [MIT "Expat" license](https://github.com/randyzwitch/LogParser.jl/blob/master/LICENSE.md)
-

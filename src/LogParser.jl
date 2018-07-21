@@ -83,15 +83,15 @@ function parseapachecombined(logline::AbstractString)
     	if (m = match(regex, logline)) != nothing
 
     	#Use try since we don't know how many matches actually happened
-	    	try ip 			= String(m.captures[1]) end
-	    	try rfc1413 	= String(m.captures[2]) end
-	    	try userid		= String(m.captures[3]) end
-	    	try requesttime	= String(m.captures[4]) end
-	    	try resource	= String(m.captures[5]) end
-	    	try statuscode	= parse(Int, m.captures[6]) end
-	    	try requestsize	= parse(Int, m.captures[7]) end
-	    	try referrer	= String(m.captures[8]) end
-	    	try useragent	= String(m.captures[9]) end
+	    	try ip 			= String(m.captures[1]) catch; end
+	    	try rfc1413 	= String(m.captures[2]) catch; end
+	    	try userid		= String(m.captures[3]) catch; end
+	    	try requesttime	= String(m.captures[4]) catch; end
+	    	try resource	= String(m.captures[5]) catch; end
+	    	try statuscode	= parse(Int, m.captures[6]) catch; end
+	    	try requestsize	= parse(Int, m.captures[7]) catch; end
+	    	try referrer	= String(m.captures[8]) catch; end
+	    	try useragent	= String(m.captures[9]) catch; end
 
 			return ApacheLog(ip, rfc1413, userid, requesttime,	resource, statuscode, requestsize, referrer, useragent)
 		end

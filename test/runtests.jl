@@ -1,5 +1,5 @@
 using LogParser
-using Base.Test
+using Test
 using GZip
 
 #Read in gzipped file

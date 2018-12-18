@@ -1,3 +1,2 @@
-julia 0.7-alpha
-DataFrames 0.11
-GZip
+julia 1.0
+DataFrames 0.15.2

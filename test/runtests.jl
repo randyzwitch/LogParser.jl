@@ -1,12 +1,11 @@
-using LogParser
-using Test
-using GZip
+using LogParser, Test, GZip, CSV, DataFrames
 
 #Read in gzipped file
-jbapachecombined = readdlm(gzopen(joinpath(dirname(@__FILE__), "data", "juliabloggers-apachecombined.gz")), '\t')
+gzipfile = gzopen(joinpath(dirname(@__FILE__), "data", "juliabloggers-apachecombined.gz"))
+jbapachecombined = CSV.read(gzipfile, delim='\t', datarow=1)
 
 #Parse file
-jbparsed = parseapachecombined(vec(jbapachecombined))
+jbparsed = parseapachecombined(jbapachecombined[:Column1])
 
 #Test that array is 122,143 elements long
 @test size(jbparsed)[1] == 122143

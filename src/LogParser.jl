@@ -1,4 +1,3 @@
-__precompile__()
 module LogParser
 
 ###############################################################################
@@ -9,10 +8,7 @@ module LogParser
 #
 ###############################################################################
 
-export
-parseapachecombined,
-DataFrame,
-ApacheLog
+export parseapachecombined, DataFrame, ApacheLog
 
 import DataFrames: DataFrame
 
@@ -73,7 +69,6 @@ function parseapachecombined(logline::AbstractString)
 
     regexarray = [apachecombinedregex, firstsevenregex, firstsixregex, firstfiveregex, firstfourregex, firstthreeregex, firsttworegex, firstfieldregex]
 
-
     #Declare variable defaults up front for less coding later
     ip = rfc1413 = userid = requesttime = resource = referrer = useragent = String("")
     statuscode = requestsize = Int(0)
@@ -103,8 +98,6 @@ function parseapachecombined(logline::AbstractString)
 
 end #End parseapachecombined::String
 
-#Vectorized version of parseapachecombined
-#Use custom version instead of base macro to control return Array type
 parseapachecombined(logarray::Array) = ApacheLog[parseapachecombined(x) for x in logarray]
 
 

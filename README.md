@@ -1,11 +1,8 @@
 # LogParser
 
 Linux: [![Build Status](https://travis-ci.org/randyzwitch/LogParser.jl.svg?branch=master)](https://travis-ci.org/randyzwitch/LogParser.jl) </br>
-pkg.julialang.org: [![LogParser](http://pkg.julialang.org/badges/LogParser_0.3.svg)](http://pkg.julialang.org/?pkg=LogParser) </br>
-pkg.julialang.org: [![LogParser](http://pkg.julialang.org/badges/LogParser_0.4.svg)](http://pkg.julialang.org/?pkg=LogParser) </br>
-pkg.julialang.org: [![LogParser](http://pkg.julialang.org/badges/LogParser_0.5.svg)](http://pkg.julialang.org/?pkg=LogParser) </br>
-pkg.julialang.org: [![LogParser](http://pkg.julialang.org/badges/LogParser_0.6.svg)](http://pkg.julialang.org/?pkg=LogParser) </br>
 Windows: [![Build status](https://ci.appveyor.com/api/projects/status/j33i3qtdnpqwjwfk?svg=true)](https://ci.appveyor.com/project/randyzwitch/logparser-jl) </br>
+Codecov: [![codecov](https://codecov.io/gh/randyzwitch/LogParser.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/randyzwitch/LogParser.jl) </br>
 
 LogParser.jl is a package for parsing server logs. Currently, only server logs having the [Apache Combined](http://httpd.apache.org/docs/2.2/logs.html#combined) format are supported (although [Apache Common](http://httpd.apache.org/docs/2.2/logs.html#common) may parse as well). Additional types of logs may be added in the future as well.
 
@@ -15,16 +12,15 @@ LogParser.jl will attempt to handle the log format even if it is mangled, return
 
 The API for this package is straightforward:
 
-	using LogParser, GZip
+	using LogParser
 
-	#Read in gzipped file
-	jbapachecombined = readdlm(gzopen(Pkg.dir("LogParser", "test", "data", "juliabloggers-apachecombined.gz")), '\t')
+	logarray = [...] #Any AbstractArray of Strings
 
 	#Parse file
-	jbparsed = parseapachecombined(vec(jbapachecombined))
+	parsed_vals = parseapachecombined(logarray)
 
 	#Convert to DataFrame if desired
-	jbparsed_df = DataFrame(jbparsed)
+	parsed_df = DataFrame(parsed_vals)
 
 ## Licensing
 

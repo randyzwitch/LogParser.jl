@@ -98,8 +98,6 @@ function parseapachecombined(logline::AbstractString)
 
 end #End parseapachecombined::String
 
-#Vectorized version of parseapachecombined
-#Use custom version instead of base macro to control return Array type
 parseapachecombined(logarray::Array) = ApacheLog[parseapachecombined(x) for x in logarray]
 
 

@@ -1,7 +1,5 @@
 ## Documentation: http://docs.travis-ci.com/user/languages/julia/
 sudo: required
-services:
-  - docker
 language: julia
 os:
   - linux
@@ -29,11 +27,11 @@ matrix:
 
 ## uncomment the following lines to override the default test script
 #script:
-#  - julia -e 'Pkg.clone(pwd()); Pkg.build("OmniSci"); Pkg.test("OmniSci"; coverage=true)'
+#  - julia -e 'Pkg.clone(pwd()); Pkg.build("LogParser"); Pkg.test("LogParser"; coverage=true)'
 after_success:
   # push coverage results to Coveralls
-  #- julia -e 'using Pkg; cd(Pkg.dir("OmniSci")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
+  #- julia -e 'using Pkg; cd(Pkg.dir("LogParser")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
   # push coverage results to Codecov
-  #- julia -e 'using Pkg; cd(Pkg.dir("OmniSci")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+  - julia -e 'using Pkg; cd(Pkg.dir("LogParser")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
   #- julia -e 'using Pkg; Pkg.add("Documenter")'
-  #- julia -e 'using Pkg; cd(Pkg.dir("OmniSci")); include(joinpath("docs", "make.jl"))'
+  #- julia -e 'using Pkg; cd(Pkg.dir("LogParser")); include(joinpath("docs", "make.jl"))'

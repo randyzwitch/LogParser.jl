@@ -17,7 +17,7 @@ The API for this package is straightforward:
 	logarray = [...] #Any AbstractArray of Strings
 
 	#Parse file
-	parsed_vals = parseapachecombined(logarray)
+	parsed_vals = parseapachecombined.(logarray)
 
 	#Convert to DataFrame if desired
 	parsed_df = DataFrame(parsed_vals)

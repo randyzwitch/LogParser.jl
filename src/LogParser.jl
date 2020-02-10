@@ -65,7 +65,7 @@ const apachecombinedregex = r"""([\d\.]+) ([\w.-]+) ([\w.-]+) (\[.+\]) "([^"\r\n
 #
 ###############################################################################
 
-function parseapachecombined(logline::AbstractString)
+function parseapachecombined(logline::T) where T <: AbstractString
 
     regexarray = [apachecombinedregex, firstsevenregex, firstsixregex, firstfiveregex, firstfourregex, firstthreeregex, firsttworegex, firstfieldregex]
 
@@ -97,9 +97,6 @@ function parseapachecombined(logline::AbstractString)
     return ApacheLog(ip, rfc1413, userid, requesttime,	resource, statuscode, requestsize, "nomatch", logline)
 
 end #End parseapachecombined::String
-
-parseapachecombined(logarray::Array) = ApacheLog[parseapachecombined(x) for x in logarray]
-
 
 ###############################################################################
 #
@@ -134,7 +131,7 @@ function DataFrame(logarray::Array{ApacheLog,1})
     _df = DataFrame()
 
     for value in sym
-    _df[value] = eval(value)
+    _df[!, value] = eval(value)
     end
 
     return _df
